@@ -133,6 +133,7 @@ flycheck_*.el
 
 ### VisualStudioCode ###
 .vscode
+cSpell.json
 
 
 
