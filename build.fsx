@@ -3,6 +3,12 @@
 
 open Fake
 
+// TODO: Add AssemblyInfo generating
+// TODO: Add Test Target
+// TODO: Add BuildNuget target && PublishNuget target
+// TODO: Add docs generating target
+// TODO: Define both Release & Debug configs here
+
 // Directories
 let buildDir  = "./build/"
 let deployDir = "./deploy/"
@@ -27,9 +33,13 @@ Target "Build" (fun _ ->
     |> Log "AppBuild-Output: "
 )
 
-// Build order
-"Clean"
-  ==> "Build"
+Target "Test" DoNothing
 
-// start build
-RunTargetOrDefault "Build"
+Target "All" DoNothing
+
+"All"
+  ==> "Clean"
+  ==> "Build"
+  ==> "Test"
+
+RunTargetOrDefault "All"
