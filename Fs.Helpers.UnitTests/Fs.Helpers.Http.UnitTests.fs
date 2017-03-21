@@ -7,5 +7,5 @@ open Fs.Helpers.Http.HttpExtensions
 
 [<Test>]
 let ``Test basic http request without mocking`` () = http {
-    GET "https://github.com/" []
+    GET "https://github.com/" None
 }

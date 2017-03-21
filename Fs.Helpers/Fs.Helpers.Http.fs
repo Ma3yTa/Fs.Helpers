@@ -13,7 +13,11 @@ module HttpExtensions =
         | (true, url) -> Some url
         | _ -> None
 
-    type HttpHeader = string * string
+    let private tryGetHeader (headers: Headers.HttpRequestHeaders seq) (header: string) : (string * string) option =
+        None
+
+
+    type HttpHeader = (string * string)
 
     type HttpContext = {
         method: HttpMethod option;
@@ -43,11 +47,19 @@ module HttpExtensions =
     let private performHttpRequest (ctx: HttpContext) : HttpResponse option =
         use client = new HttpClient ()
         use message = new HttpRequestMessage ()
+
+        // Assuming that both method & uri are set, as we did 'validateHttpContext' before
         message.Method <- Option.get ctx.method
         message.RequestUri <- Option.get ctx.uri
+
         match ctx.headers with
-        | Some headers -> headers |> Seq.iter message.Headers.Add
-        | None -> ()
+            | Some headers -> headers |> Seq.iter message.Headers.Add
+            | None -> ()
+
+        match ctx.body with
+            | Some body -> message.Content <- new ByteArrayContent(body)
+            | None -> ()
+
         None
 
     type HttpBuilder () =
@@ -71,7 +83,7 @@ module HttpExtensions =
         member this.GET(ctx: HttpContext, uri: string, headers: (string * string) list option) =
             { ctx with method = Some HttpMethod.Get; uri = uri |> tryParseUri; headers = headers }
 
-        member __.Run(ctx: HttpContext) =
+        member this.Run(ctx: HttpContext) =
             match ctx |> validateHttpContext with
             | Some ctx -> ctx |> performHttpRequest
             | None -> None
