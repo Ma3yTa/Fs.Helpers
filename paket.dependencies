@@ -1,3 +1,13 @@
 source https://www.nuget.org/api/v2
+nuget System.Net.Http
+nuget FSharp.Core
 nuget FAKE
-nuget FsUnit
+
+github fsprojects/FsUnit src/FsUnit.NUnit/FsUnitTyped.fs
+
+group Test
+    source https://www.nuget.org/api/v2
+    nuget NUnit.Runners
+    nuget NUnit
+    nuget NUnit.Console
+    nuget FsUnit
