@@ -1,6 +1,6 @@
 namespace Fs.Helpers.Monads
 
-
+[<AutoOpen>]
 module MonadsHelpers =
     [<Sealed>]
     type Bind = Bind with
